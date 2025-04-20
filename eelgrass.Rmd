@@ -27,5 +27,22 @@ VCF_FILE="/courses/EEMB5538.202530/data/Zm_TomBod_MAF01MM85INDM30_AllChr.recode.
 REF_GENOME="/courses/EEMB5538.202530/data/Zmarina_668_v2.0.fa"
 OUTPUT_DNABIN="output_dnabin.rds"
 R_SCRIPT=“run_vcf2dnabin.R"
+
+# Write R script:
+cat > $R_SCRIPT <<EOF
+library(psmcr)
+dnabin_obj <- VCF2DNAbin(“$VCF_FILE”, 	 refgenome=“$REF_GENOME”, individual = 105)
+
+# Save DNAbin object
+saveRDS
+(dnabin_onj, file=“$OUTPUT_DNABIN”)
+
+# Run psmc model
+psmcr_result <- psmc(dnabin_obj, niters = 5, B = 30, mc.cores = 8)
+# Save model
+saveRDS(psmcr_result, file=“psmcr.rds”)
+EOF
+Rscript $R_SCRIPT
+
 ```
 
